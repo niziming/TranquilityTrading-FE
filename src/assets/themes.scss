@@ -1,0 +1,21 @@
+@import "./variable.scss";
+
+// 主题切换
+$theme-light: (
+  text-color: #ff2e3e,
+  bg-color: #1aff38,
+  border-color: #00F6FF,
+  sb-bg: #ff8800,
+);
+
+$theme-dark: (
+  text-color: #0053ff,
+  bg-color: #fff8a0,
+  border-color: #ff00d3,
+  sb-bg: #00ff95,
+);
+
+$themes: (
+  light: $theme-light,
+  dark: $theme-dark,
+);

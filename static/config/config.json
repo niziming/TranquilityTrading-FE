@@ -1,0 +1,27 @@
+{
+  "axios": {
+    "remote": {
+      "value": "192.168.1.232"
+    },
+    "protocol": {
+      "desc": "说明：后端数据接口基地址",
+      "value": "http"
+    },
+    "baseURL": {
+      "desc": "说明：后端数据接口基地址",
+      "value": "http://192.168.1.213:30001/api"
+    },
+    "ssoUrl": {
+      "desc": "说明：token获取地址",
+      "value": "http://****.232:30100"
+    },
+    "timeout": {
+      "desc": "axios 请求超时（单位：毫秒）",
+      "value": 100
+    }
+  },
+  "imageBase": {
+    "desc": "图片存放（使用）地址",
+    "value": "http://****.232:30800/"
+  }
+}

@@ -1,0 +1,26 @@
+.app-container {
+  border-radius: 5px;
+}
+[data-theme=light] .app-container {
+  color: #ff2e3e;
+  background-color: #1aff38;
+}
+[data-theme=dark] .app-container {
+  color: #0053ff;
+  background-color: #fff8a0;
+}
+
+.GlobalTable {
+  border-radius: 5px;
+  height: 100px;
+}
+[data-theme=light] .GlobalTable {
+  border: 1px solid #00F6FF;
+  background-color: #ff8800;
+}
+[data-theme=dark] .GlobalTable {
+  border: 1px solid #ff00d3;
+  background-color: #00ff95;
+}
+
+/*# sourceMappingURL=global.css.map */

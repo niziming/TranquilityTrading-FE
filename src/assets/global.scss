@@ -1,0 +1,18 @@
+@import "./mixin.scss";
+
+.app-container {
+  border-radius: 5px;
+  @include themify {
+    color: themed('text-color');
+    background-color: themed('bg-color');
+  }
+}
+
+.GlobalTable {
+  border-radius: 5px;
+  height: 100px;
+  @include themify {
+    border: 1px solid themed('border-color');
+    background-color: themed('sb-bg');
+  }
+}
