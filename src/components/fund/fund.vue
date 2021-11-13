@@ -1,91 +1,75 @@
 <template>
-  <div>
-    <div style="margin: 10px 0">
-      <el-form ref="form" :model="fund" label-width="80px">
-        <el-form-item label="基金编码" style="width: 33%; float: left">
-          <el-input @input="getTableData()" v-model="fund.fundCode"/>
-        </el-form-item>
-        <el-form-item label="基金简称" style="width: 33%;  float: left">
-          <el-input @input="getTableData()" v-model="fund.fundIntro"/>
-        </el-form-item>
-        <el-form-item label="基金类型" style="width: 33%;  float: left">
-          <el-input @input="getTableData()" v-model="fund.fundType"/>
-        </el-form-item>
-      </el-form>
-    </div>
-    <common-table
-      @current-change="page => getTableData(page)"
-      :table-data="tableData"
-      :table-column="tableColumn"
-      :pager="fund"
-    />
+  <div ref="draw">
+    welcome to fund
   </div>
 </template>
 
 <script>
-import CommonTable from '../common/CommonTable'
-
+import { createChart } from 'lightweight-charts'
 export default {
-  components: {CommonTable},
   name: 'fund',
   data () {
     return {
-      fund: {
-        fundCode: '',
-        fundIntro: '',
-        fundType: '',
-        page: 1,
-        size: 10,
-        total: 10
-      },
-      tableColumn: [
-        {
-          prop: 'fundCode',
-          label: '基金代码'
-        },
-        {
-          prop: 'fundAbbr',
-          label: '拼音缩写'
-        },
-        {
-          prop: 'fundIntro',
-          label: '基金简称'
-        },
-        {
-          prop: 'fundType',
-          label: '基金类型'
-        },
-        {
-          prop: 'fundPinyin',
-          label: '拼音全称'
-        }
-      ],
-      tableData: [
-        {
-          fundCode: '基金代码',
-          fundAbbr: '拼音缩写',
-          fundIntro: '基金简称',
-          fundType: '基金类型',
-          fundPinyin: '拼音全称'
-        }
-      ]
+      chart: undefined,
+      screenWidth: document.body.clientWidth, // 屏幕宽度
+      screenHeight: document.body.clientHeight // 屏幕高度
+    }
+  },
+  watch: {
+    screenWidth (val) { // 监听屏幕宽度变化
+      console.log(val)
+      this.reDraw()
+    },
+    screenHeight (val) { // 监听屏幕高度变化
+      console.log(val)
+
+      this.reDraw()
     }
   },
   mounted () {
-    this.getTableData()
+    this.initDraw()
+    this.initScreenMonitor()
   },
   methods: {
-    getTableData (page) {
-      this.fund.page = page || this.fund.page
-      this.$axios.get('/fundBasicInfo', {params: this.fund}).then(res => {
-        this.fund.total = res.data.data.total
-        this.tableData = res.data.data.records
-      })
+    initScreenMonitor () {
+      window.onresize = () => { // 定义窗口大小变更通知事件
+        this.screenWidth = document.documentElement.clientWidth // 窗口宽度
+        this.screenHeight = document.documentElement.clientHeight // 窗口高度
+      }
+    },
+    initDraw () {
+      let dom = this.$refs.draw
+      let width = this.$refs.draw.clientWidth
+      let height = this.$refs.draw.clientHeight
+      this.chart = createChart(dom, { width: width, height: height })
+      const lineSeries = this.chart.addLineSeries()
+      lineSeries.setData([
+        { time: '2019-04-11', value: 80.01 },
+        { time: '2019-04-12', value: 96.63 },
+        { time: '2019-04-13', value: 76.64 },
+        { time: '2019-04-14', value: 81.89 },
+        { time: '2019-04-15', value: 74.43 },
+        { time: '2019-04-16', value: 80.01 },
+        { time: '2019-04-17', value: 96.63 },
+        { time: '2019-04-18', value: 76.64 },
+        { time: '2019-04-19', value: 81.89 },
+        { time: '2019-04-20', value: 74.43 }
+      ])
+    },
+    reDraw () {
+      let width = this.$refs.draw.clientWidth
+      let height = this.$refs.draw.clientHeight
+      console.log(width, height)
+      this.chart.resize(width, height)
     }
   }
 }
 </script>
 
 <style scoped>
+#draw {
+  width: 100%;
+  height: 100%;
+}
 
 </style>

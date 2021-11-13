@@ -3,6 +3,7 @@ import Router from 'vue-router'
 const index = () => import('@/components/index.vue')
 const GlobalTable = () => import('@/components/common/GlobalTable')
 const fund = () => import('@/components/fund/fund')
+const FundList = () => import('@/components/fund/fundlist')
 
 const error = () => import('@/components/404.vue')
 Vue.use(Router)
@@ -24,6 +25,11 @@ const router = new Router({
           path: '/global-table',
           name: 'GlobalTable',
           component: GlobalTable
+        },
+        {
+          path: '/fundlist',
+          name: 'fundlist',
+          component: FundList
         },
         {
           path: '/fund',
