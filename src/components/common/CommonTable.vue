@@ -97,7 +97,7 @@ export default {
     _rowStyle (rowData) {
       let { row } = rowData
       return {
-        height: '30px',
+        height: '20px',
         'color': row.rowColor || ''
       }
     },

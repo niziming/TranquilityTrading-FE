@@ -1,26 +1,27 @@
 <template>
-  <el-container>
-    <el-header class="header">十渊佛系量化交易系统</el-header>
-    <el-container>
-      <AsideBar/>
-      <el-container>
-        <el-main class="main">
-          <bread-crumb/>
-          <router-view/>
-        </el-main>
-        <el-footer class="footer">@ 十渊</el-footer>
-      </el-container>
-    </el-container>
-  </el-container>
+  <div class="app-root" :data-theme="theme">
+    <div class="app-container">
+      <p>{{ theme }}</p>
+      <label>
+        <select v-model="theme">
+          <option value="light">light</option>
+          <option value="dark">dark</option>
+        </select>
+      </label>
+      <router-view/>
+      <CommonTable :tableColumn="tableColumn" />
+      <el-button @click="changeTheme">
+        click
+      </el-button>
+    </div>
+  </div>
 </template>
 
 <script>
-import Header from './layout/header'
-import AsideBar from './layout/aside'
-import BreadCrumb from './layout/breadcrumb'
+import CommonTable from './common/CommonTable';
 export default {
   name: 'index',
-  components: {Header, AsideBar, BreadCrumb},
+  components: {CommonTable},
   data () {
     return {
       tableColumn: [

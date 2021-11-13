@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 const index = () => import('@/components/index.vue')
-const error = () => import('@/components/404.vue')
 const GlobalTable = () => import('@/components/common/GlobalTable')
+const fund = () => import('@/components/fund/fund')
 
+const error = () => import('@/components/404.vue')
 Vue.use(Router)
 
 Router.prototype.goBack = () => {
@@ -23,6 +24,11 @@ const router = new Router({
           path: '/global-table',
           name: 'GlobalTable',
           component: GlobalTable
+        },
+        {
+          path: '/fund',
+          name: 'fund',
+          component: fund
         }
       ]
     },

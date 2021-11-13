@@ -9,7 +9,7 @@
     },
     "baseURL": {
       "desc": "说明：后端数据接口基地址",
-      "value": "http://192.168.1.213:30001/api"
+      "value": "http://127.0.0.1:8701"
     },
     "ssoUrl": {
       "desc": "说明：token获取地址",

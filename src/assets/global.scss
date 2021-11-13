@@ -1,4 +1,37 @@
 @import "./mixin.scss";
+body {
+  margin: 0;
+  padding: 0;
+}
+
+//头部
+.header {
+  height: 60px;
+  width: 100vw;
+  text-align: center;
+  font-size: 24px;
+  background-color: #f5f5f5;
+}
+.aside-bar {
+  height: calc(100vh - 120px);
+  text-align: center;
+  font-size: 24px;
+  background-color: #d5d8ff;
+}
+
+.main {
+  height: calc(100vh - 100px);
+  text-align: center;
+  font-size: 24px;
+}
+
+.footer {
+  color: #c4c4c4;
+  height: 40px !important;
+  text-align: center;
+  font-size: 14px;
+  background-color: #f5f5f5;
+}
 
 .app-container {
   border-radius: 5px;
