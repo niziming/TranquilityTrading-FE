@@ -17,7 +17,7 @@
     },
     "timeout": {
       "desc": "axios 请求超时（单位：毫秒）",
-      "value": 100
+      "value": 20000
     }
   },
   "imageBase": {
