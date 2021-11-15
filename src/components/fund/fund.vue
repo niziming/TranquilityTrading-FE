@@ -1,12 +1,12 @@
 <template>
   <div ref="draw">
     <el-form ref="form" :model="fundParam" label-width="80px">
-      <el-form-item label="基金编码:" style="margin: 10px 0; width: 13%; float: left">
+      <el-form-item label="基金编码:" style="margin: 10px 0;  float: left">
         <auto-complete @select="item => handleSelect(item)"/>
       </el-form-item>
-      <el-form-item label="基金简称:" style="margin: 10px 0; width: 13%; float: left">
-        <auto-complete @select="item => handleSelect(item)"/>
-      </el-form-item>
+<!--      <el-form-item label="基金简称:" style="margin: 10px 0; width: 13%; float: left">-->
+<!--        <auto-complete @select="item => handleSelect(item)"/>-->
+<!--      </el-form-item>-->
       <el-form-item label="查询参数:" style="margin: 10px 0; width: 13%; float: left">
         <el-dropdown>
           <el-button type="primary">

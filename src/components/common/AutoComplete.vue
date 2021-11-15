@@ -26,7 +26,7 @@ export default {
       timeout: null
     };
   },
-  mounted() {
+  mounted () {
     this.init(this.fund).then(data => {
       this.restaurants = data
     })
