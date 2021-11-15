@@ -12,7 +12,7 @@
 <script>
 export default {
   name: "AutoComplete",
-  data() {
+  data () {
     return {
       restaurants: [
         {"value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号"},
@@ -43,7 +43,7 @@ export default {
         resolve();
       });
       promise.then(() => {
-        param = {fundIntro: queryString}
+        param = {fundCode: queryString}
       }).then(() => {
         this.init(param).then(data => {
           cb(data)

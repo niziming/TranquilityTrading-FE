@@ -2,31 +2,48 @@
   <div ref="draw">
     <el-form ref="form" :model="fundParam" label-width="80px">
       <el-form-item label="基金编码:" style="margin: 10px 0; width: 13%; float: left">
-        <auto-complete @select="item => handleSelect(item)" />
+        <auto-complete @select="item => handleSelect(item)"/>
       </el-form-item>
       <el-form-item label="基金简称:" style="margin: 10px 0; width: 13%; float: left">
-        <auto-complete/>
+        <auto-complete @select="item => handleSelect(item)"/>
+      </el-form-item>
+      <el-form-item label="查询参数:" style="margin: 10px 0; width: 13%; float: left">
+        <el-dropdown>
+          <el-button type="primary">
+            {{ fundParam.indicator }}<i class="el-icon-arrow-down el-icon--right"/>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>单位净值走势</el-dropdown-item>
+            <el-dropdown-item>累计净值走势</el-dropdown-item>
+            <el-dropdown-item>累计收益率走势</el-dropdown-item>
+            <el-dropdown-item>同类排名走势</el-dropdown-item>
+            <el-dropdown-item>同类排名百分比</el-dropdown-item>
+            <el-dropdown-item>分红送配详情</el-dropdown-item>
+            <el-dropdown-item>拆分详情</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-form-item>
     </el-form>
     <br>
-    <div style="text-align: center">({{fund.fundCode}})[{{fund.fundIntro}}]</div>
+    <div style="text-align: center">({{ fund.fundCode }})[{{ fund.fundIntro }}]</div>
   </div>
 </template>
 
 <script>
-import { createChart } from 'lightweight-charts'
+import {createChart} from 'lightweight-charts'
 import AutoComplete from '../common/AutoComplete'
+
 export default {
   components: {AutoComplete},
-  comments: { AutoComplete },
+  comments: {AutoComplete},
   name: 'fund',
-  data () {
+  data() {
     return {
       fundParam: {
         fund: '167301',
-        indicator: '累计净值走势'
+        indicator: '单位净值走势'
       },
-      fund: 	{
+      fund: {
         fundAbbr: "",
         fundCode: "基金代码",
         fundIntro: "基金简称",
@@ -40,17 +57,17 @@ export default {
     }
   },
   watch: {
-    screenWidth (val) { // 监听屏幕宽度变化
+    screenWidth(val) { // 监听屏幕宽度变化
       console.log(val)
       this.reDraw()
     },
-    screenHeight (val) { // 监听屏幕高度变化
+    screenHeight(val) { // 监听屏幕高度变化
       console.log(val)
 
       this.reDraw()
     }
   },
-  mounted () {
+  mounted() {
     this.getData(this.fundParam).then(data => {
       this.draw(data)
     })
@@ -65,13 +82,13 @@ export default {
       });
       let param;
       promise.then(() => {
-        param =  {
+        param = {
           fund: item.fundCode,
-          indicator: '累计净值走势'
+          indicator: '单位净值走势'
         }
       }).then(() => {
         this.getData(param).then(data => {
-          this.lineSeries.setMarkers(data)
+          this.lineSeries.setData(data)
         })
       })
     },
@@ -90,11 +107,11 @@ export default {
     },
 
     // 绘制图标
-    draw (data) {
+    draw(data) {
       let dom = this.$refs.draw
       let width = this.$refs.draw.clientWidth
       let height = this.$refs.draw.clientHeight
-      this.chart = createChart(dom, { width: width, height: 300 })
+      this.chart = createChart(dom, {width: width, height: 300})
       this.lineSeries = this.chart.addLineSeries()
       this.lineSeries.setData(data)
       // lineSeries.setData([
@@ -110,11 +127,11 @@ export default {
       //   { time: '2019-04-20', value: 74.43 }
       // ])
     },
-    reDraw (data) {
+    reDraw(data) {
       let width = this.$refs.draw.clientWidth
       let height = this.$refs.draw.clientHeight
       console.log(width, height)
-      this.chart.resize(width, 300  )
+      this.chart.resize(width, 300)
     }
   }
 }
