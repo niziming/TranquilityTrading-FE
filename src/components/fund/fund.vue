@@ -1,12 +1,12 @@
 <template>
-  <div ref="draw">
+  <div>
     <el-form ref="form" :model="fundParam" label-width="80px">
       <el-form-item label="基金编码:" style="margin: 10px 0;  float: left">
         <auto-complete @select="item => handleSelect(item)"/>
       </el-form-item>
-<!--      <el-form-item label="基金简称:" style="margin: 10px 0; width: 13%; float: left">-->
-<!--        <auto-complete @select="item => handleSelect(item)"/>-->
-<!--      </el-form-item>-->
+      <!--      <el-form-item label="基金简称:" style="margin: 10px 0; width: 13%; float: left">-->
+      <!--        <auto-complete @select="item => handleSelect(item)"/>-->
+      <!--      </el-form-item>-->
       <el-form-item label="查询参数:" style="margin: 10px 0; width: 13%; float: left">
         <el-dropdown>
           <el-button type="primary">
@@ -25,7 +25,82 @@
       </el-form-item>
     </el-form>
     <br>
-    <div style="text-align: center">({{ fund.fundCode }})[{{ fund.fundIntro }}]</div>
+    <div style="text-align: center">({{ fund.fundCode || 167301 }})[{{ fund.fundIntro || '单位净值走势' }}]</div>
+    <div ref="draw"/>
+    <div style="text-align: left">
+      <el-dropdown>
+        <el-button type="primary">
+          交易策略选择<i class="el-icon-arrow-down el-icon--right"/>
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>网格交易策略</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <el-button @click="selectStrategy()"> 执行策略</el-button>
+      <div>
+        <h6>执行参数</h6>
+        <el-form ref="form" :model="backTest" label-width="80px">
+          <el-form-item label="加仓阈值:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTest.add" />
+          </el-form-item>
+
+          <el-form-item label="减仓阈值:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTest.sub" />
+          </el-form-item>
+
+          <el-form-item label="初始资金:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTest.initCash" />
+          </el-form-item>
+
+          <el-form-item label="加仓率:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTest.addRate" />
+          </el-form-item>
+
+          <el-form-item label="加仓深度:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTest.addDepth" />
+          </el-form-item>
+
+          <el-form-item label="减仓深度:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTest.subDepth" />
+
+          </el-form-item>
+        </el-form>
+      </div>
+      <br>
+      <div>
+        <h6>回测结果</h6>
+        <el-form ref="form" :model="backTest" label-width="80px">
+          <el-form-item label="初始资金:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTest.initCash" disabled/>
+          </el-form-item>
+
+          <el-form-item label="目前资金:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTest.usageCash" disabled/>
+          </el-form-item>
+
+          <el-form-item label="目前持仓:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTest.depot" disabled/>
+          </el-form-item>
+
+          <el-form-item label="总资产:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTest.depot * backTest.lastValue + backTest.usageCash" disabled/>
+          </el-form-item>
+
+          <el-form-item label="买入次数:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTest.bueTime" disabled/>
+          </el-form-item>
+
+          <el-form-item label="卖出次数:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTest.sellTime" disabled/>
+          </el-form-item>
+
+        </el-form>
+
+      </div>
+
+    </div>
+
+
   </div>
 </template>
 
@@ -39,6 +114,16 @@ export default {
   name: 'fund',
   data() {
     return {
+      backTest: {
+        add: -0.015,
+        sub: 0.020,
+        addRate: 0.15,
+        subRate: 0.20,
+        addDepth: 4,
+        subDepth: 4,
+        initCash: 5000
+      },
+      fundData: [],
       fundParam: {
         fund: '167301',
         indicator: '单位净值走势'
@@ -75,7 +160,7 @@ export default {
   },
   methods: {
     // 输入框选择事件
-    handleSelect (item) {
+    handleSelect(item) {
       this.fund = item
       const promise = new Promise((resolve, reject) => {
         resolve();
@@ -93,8 +178,20 @@ export default {
       })
     },
 
+    selectStrategy() {
+      let that = this
+      this.$axios.post("/fundBasicInfo/trading/grid", {
+        fundParam: that.fundParam,
+        backTest: that.backTest
+      }).then(res => {
+        that.backTest = res.data.data
+        this.lineSeries.setMarkers([])
+        this.lineSeries.setMarkers(res.data.data.tridings)
+      })
+    },
+
     // 初始化窗口监听事件加载
-    initScreenMonitor () {
+    initScreenMonitor() {
       window.onresize = () => { // 定义窗口大小变更通知事件
         this.screenWidth = document.documentElement.clientWidth // 窗口宽度
         this.screenHeight = document.documentElement.clientHeight // 窗口高度
@@ -102,7 +199,7 @@ export default {
     },
 
     // 获取数据
-    getData (param) {
+    getData(param) {
       return this.$axios.post('/fundBasicInfo/history', param).then(res => res.data.data)
     },
 
