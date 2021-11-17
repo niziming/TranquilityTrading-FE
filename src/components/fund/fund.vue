@@ -39,31 +39,31 @@
       <el-button @click="selectStrategy()"> 执行策略</el-button>
       <div>
         <h6>执行参数</h6>
-        <el-form ref="form" :model="backTest" label-width="80px">
+        <el-form ref="form" :model="backTestParam" label-width="80px">
           <el-form-item label="加仓阈值:" style="margin: 10px 0;  float: left">
-            <el-input v-model="backTest.add" />
+            <el-input v-model="backTestParam.add"/>
           </el-form-item>
 
           <el-form-item label="减仓阈值:" style="margin: 10px 0;  float: left">
-            <el-input v-model="backTest.sub" />
+            <el-input v-model="backTestParam.sub"/>
           </el-form-item>
 
           <el-form-item label="初始资金:" style="margin: 10px 0;  float: left">
-            <el-input v-model="backTest.initCash" />
+            <el-input v-model="backTestParam.initCash"/>
           </el-form-item>
 
           <el-form-item label="加仓率:" style="margin: 10px 0;  float: left">
-            <el-input v-model="backTest.addRate" />
+            <el-input v-model="backTestParam.addRate"/>
           </el-form-item>
 
           <el-form-item label="加仓深度:" style="margin: 10px 0;  float: left">
-            <el-input v-model="backTest.addDepth" />
+            <el-input v-model="backTestParam.addDepth"/>
           </el-form-item>
 
           <el-form-item label="减仓深度:" style="margin: 10px 0;  float: left">
-            <el-input v-model="backTest.subDepth" />
-
+            <el-input v-model="backTestParam.subDepth"/>
           </el-form-item>
+
         </el-form>
       </div>
       <br>
@@ -114,15 +114,16 @@ export default {
   name: 'fund',
   data() {
     return {
-      backTest: {
-        add: -0.015,
-        sub: 0.020,
+      backTestParam: {
+        add: -0.025,
+        sub: 0.030,
         addRate: 0.15,
         subRate: 0.20,
         addDepth: 4,
         subDepth: 4,
         initCash: 5000
       },
+      backTest: {},
       fundData: [],
       fundParam: {
         fund: '167301',
@@ -146,9 +147,8 @@ export default {
       console.log(val)
       this.reDraw()
     },
-    screenHeight(val) { // 监听屏幕高度变化
+    screenHeight (val) { // 监听屏幕高度变化
       console.log(val)
-
       this.reDraw()
     }
   },
@@ -160,7 +160,8 @@ export default {
   },
   methods: {
     // 输入框选择事件
-    handleSelect(item) {
+    handleSelect (item) {
+      this.fundParam.fund = item.fundCode
       this.fund = item
       const promise = new Promise((resolve, reject) => {
         resolve();
@@ -171,45 +172,29 @@ export default {
           fund: item.fundCode,
           indicator: '单位净值走势'
         }
-
       }).then(() => {
         this.getData(param).then(data => {
-          this.lineSeries.setMarkers([
-            {
-              time: '2019-04-09',
-              position: 'aboveBar',
-              color: 'blue',
-              text: '买',
-              shape: 'arrowDown',
-            },
-            {
-              time: '2019-05-31',
-              position: 'belowBar',
-              color: 'green',
-              shape: 'arrowUp',
-              text: '卖',
-              id: 'id3',
-            },
-          ]);
           this.lineSeries.setData(data)
         })
       })
     },
 
-    selectStrategy() {
+    selectStrategy () {
       let that = this
       this.$axios.post("/fundBasicInfo/trading/grid", {
         fundParam: that.fundParam,
-        backTest: that.backTest
+        backTest: that.backTestParam
       }).then(res => {
-        that.backTest = res.data.data
-        this.lineSeries.setMarkers([])
-        this.lineSeries.setMarkers(res.data.data.tridings)
+        if (res.data.data) {
+          that.backTest = res.data.data
+          debugger
+          this.lineSeries.setMarkers(res.data.data.tridings)
+        }
       })
     },
 
     // 初始化窗口监听事件加载
-    initScreenMonitor() {
+    initScreenMonitor () {
       window.onresize = () => { // 定义窗口大小变更通知事件
         this.screenWidth = document.documentElement.clientWidth // 窗口宽度
         this.screenHeight = document.documentElement.clientHeight // 窗口高度
