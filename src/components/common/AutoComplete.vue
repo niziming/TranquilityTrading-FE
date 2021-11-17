@@ -1,8 +1,9 @@
 <template>
   <div>
     <el-autocomplete
+      size="medium"
       v-model="fund.fundCode"
-      value-key="fundIntro"
+      value-key="showKey"
       :fetch-suggestions="querySearchAsync"
       placeholder="请输入内容"
       @select="(item) => $emit('select', item)"/>
@@ -46,6 +47,11 @@ export default {
         param = {fundCode: queryString}
       }).then(() => {
         this.init(param).then(data => {
+          if (data) {
+            data.forEach(d => {
+              d.showKey = d.fundCode + ':' + d.fundIntro
+            })
+          }
           cb(data)
         })
       })

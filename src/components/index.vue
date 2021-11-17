@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header class="header">十渊佛系量化交易系统</el-header>
+<!--    <el-header class="header">十渊佛系量化交易系统</el-header>-->
     <el-container>
       <AsideBar/>
       <el-container>

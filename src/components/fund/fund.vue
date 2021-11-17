@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form ref="form" :model="fundParam" label-width="80px">
-      <el-form-item label="基金编码:" style="margin: 10px 0;  float: left">
+      <el-form-item label="基金编码:" style="margin: 10px 0; float: left">
         <auto-complete @select="item => handleSelect(item)"/>
       </el-form-item>
       <!--      <el-form-item label="基金简称:" style="margin: 10px 0; width: 13%; float: left">-->
@@ -171,8 +171,26 @@ export default {
           fund: item.fundCode,
           indicator: '单位净值走势'
         }
+
       }).then(() => {
         this.getData(param).then(data => {
+          this.lineSeries.setMarkers([
+            {
+              time: '2019-04-09',
+              position: 'aboveBar',
+              color: 'blue',
+              text: '买',
+              shape: 'arrowDown',
+            },
+            {
+              time: '2019-05-31',
+              position: 'belowBar',
+              color: 'green',
+              shape: 'arrowUp',
+              text: '卖',
+              id: 'id3',
+            },
+          ]);
           this.lineSeries.setData(data)
         })
       })
