@@ -56,6 +56,10 @@
             <el-input v-model="backTestParam.addRate"/>
           </el-form-item>
 
+          <el-form-item label="减仓率:" style="margin: 10px 0;  float: left">
+            <el-input v-model="backTestParam.subRate"/>
+          </el-form-item>
+
           <el-form-item label="加仓深度:" style="margin: 10px 0;  float: left">
             <el-input v-model="backTestParam.addDepth"/>
           </el-form-item>
@@ -66,9 +70,9 @@
 
         </el-form>
       </div>
-      <br>
-      <div>
-        <h6>回测结果</h6>
+      <div style="display: block">
+        <br>
+        <h6>               回测结果</h6>
         <el-form ref="form" :model="backTest" label-width="80px">
           <el-form-item label="初始资金:" style="margin: 10px 0;  float: left">
             <el-input v-model="backTest.initCash" disabled/>
